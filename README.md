@@ -13,8 +13,11 @@ Claude Code 插件。正常开发需求按 PRD 驱动的串行流程完成：
 
 - `codex` CLI（已登录）。Reviewer 默认 `gpt-6.2-astra` / high，可用 `BATON_REVIEW_MODEL`、`BATON_REVIEW_EFFORT` 覆盖。
 - CNB 仓库需要 `cnb` CLI（`npm i -g @cnbcool/cnb-cli && cnb login`）；GitHub 仓库需要 `gh`。
+- `jq`。
 
-## 文件
+## 权限
+
+技能已预先放行 `scripts/start.sh` 和 `scripts/review.sh`。要无人值守地跑完，还需要在 Claude Code 里放行或用自动模式处理 git add/commit、测试命令、`gh`/`cnb`。`git push` 建议保留确认，或只放行推送到功能分支。
 
 ## 结构
 

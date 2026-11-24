@@ -1,6 +1,6 @@
 ---
 name: prd
-description: 本技能用于在写代码之前把开发需求整理成经过验证的 PRD。适用于用户说“先写个需求文档”“出个 PRD”“整理一下需求”“帮我设计一下这个功能”“write a PRD”，以及 baton:build 开工时发现还没有已确认的 PRD。流程是读代码收集仓库上下文，按第一性原理和成熟方案起稿，由 Codex 交叉验证，最后请用户确认。一两行的明确小改、纯问答、只改文档或配置时不使用。
+description: 本技能用于在写代码之前把开发需求整理成经过验证的 PRD。适用于用户说“先写个需求文档”“出个 PRD”“写一份 PRD”“write a PRD”，以及 baton:build 开工时发现还没有已确认的 PRD。本技能会切出新分支，所以用户只是讨论方案、问怎么设计时不使用；一两行的明确小改、纯问答、只改文档或配置时也不使用。
 argument-hint: "[base=<基线分支>] <需求描述>"
 allowed-tools: Bash(${CLAUDE_PLUGIN_ROOT}/scripts/start.sh *), Bash(${CLAUDE_PLUGIN_ROOT}/scripts/review.sh *)
 ---
@@ -23,8 +23,10 @@ allowed-tools: Bash(${CLAUDE_PLUGIN_ROOT}/scripts/start.sh *), Bash(${CLAUDE_PLU
 - `${CLAUDE_PLUGIN_ROOT}/references/engineering.md`：工程准则，起稿前读。
 - `${CLAUDE_PLUGIN_ROOT}/references/prd-template.md`：PRD 模板。
 - `${CLAUDE_PLUGIN_ROOT}/references/briefs.md`：其中“PRD 交叉验证说明”是 Codex 的说明模板。
-- `${CLAUDE_PLUGIN_ROOT}/scripts/start.sh <branch> [base]`：切分支，建工作目录。
-- `${CLAUDE_PLUGIN_ROOT}/scripts/review.sh <workdir> <id> [max-rounds]`：Codex 只读审查，续接同一会话。退出码 0 通过，2 打回，3 达到上限。
+- `"${CLAUDE_PLUGIN_ROOT}/scripts/start.sh" <branch> [base]`：切分支，建工作目录，把基线记到 `.baton/<branch>/base`。已在该分支且工作目录存在时直接返回原基线。
+- `"${CLAUDE_PLUGIN_ROOT}/scripts/review.sh" <workdir 绝对路径> <id> [max-rounds]`：Codex 只读审查，续接同一会话。退出码 0 通过，2 打回，3 达到上限。其他非零值是脚本或 Codex 故障：读 stderr，修好环境后重跑，不计轮次；属于登录或凭据问题时停下，请用户处理。
+
+脚本按上面的完整路径调用，不要加 `bash` 前缀或 `cd ... &&`，否则匹配不到预先放行的权限。
 
 ---
 
@@ -33,10 +35,14 @@ allowed-tools: Bash(${CLAUDE_PLUGIN_ROOT}/scripts/start.sh *), Bash(${CLAUDE_PLU
 **目标：** 在干净的新分支上建好工作目录。
 
 **动作：**
+0. **续跑判断。** 当前分支下已有 `.baton/<当前分支>/PRD.md` 时，不要新开分支，从断点继续：
+   - 没有 `reviews/PRD.rounds`：草稿未完成或未验证，从阶段 3 补全草稿。
+   - 有 `reviews/PRD.rounds`：从阶段 4 继续，下一轮沿用同一个 Codex 会话。
+   - 首行是 `状态：已确认`：PRD 已定稿，直接返回。
 1. 从需求里解析出基线参数 `base=<分支>`。没写就交给脚本处理：默认 `dev`，没有 `dev` 时用远端默认分支。
 2. 按仓库惯例起分支名，参考 `git branch -r` 和 `git log --oneline -20`。
 3. 判断涉及哪些仓库。跨仓库时每个仓库都跑一次，分支同名。
-4. 在每个仓库根目录运行 `start.sh <branch> [base]`。脚本会从最新远端基线切分支、取消 upstream、建立 `.baton/<branch>/`，并把 `.baton/` 写进 `.git/info/exclude`，这些文件不会进 PR。
+4. 在每个仓库根目录运行 `"${CLAUDE_PLUGIN_ROOT}/scripts/start.sh" <branch> [base]`。脚本会从最新远端基线切出不跟踪远端的分支，建立 `.baton/<branch>/`，并把 `.baton/` 写进 `.git/info/exclude`，这些文件不会进 PR。分支名已被占用时脚本会退出，换一个分支名。
 5. 脚本因工作区不干净退出时，停下来问用户如何处理已有改动。不要 stash 或丢弃用户的改动。
 
 ---
@@ -78,7 +84,7 @@ allowed-tools: Bash(${CLAUDE_PLUGIN_ROOT}/scripts/start.sh *), Bash(${CLAUDE_PLU
 
 **动作：**
 1. 按“PRD 交叉验证说明”模板写 `.baton/<branch>/reviews/PRD.prompt.md`。
-2. 运行 `${CLAUDE_PLUGIN_ROOT}/scripts/review.sh .baton/<branch> PRD 3`。工程准则会自动拼在说明前面。
+2. 运行 `"${CLAUDE_PLUGIN_ROOT}/scripts/review.sh" <仓库根目录>/.baton/<branch> PRD 3`。工程准则会自动拼在说明前面。
 3. 逐条判断结论：
    - 成立的：修改 PRD。
    - 不成立的：把理由写进假设节。
