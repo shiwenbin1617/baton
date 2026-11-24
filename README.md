@@ -22,7 +22,7 @@ PRD、TASKS、审查记录放在仓库内 `.baton/<branch>/`，由 `.git/info/ex
 
 ```bash
 claude plugin marketplace add shiwenbin1617/baton
-claude plugin install baton@baton-local
+claude plugin install baton@baton
 ```
 
-会话内也可以用 `/plugin marketplace add shiwenbin1617/baton` 和 `/plugin install baton@baton-local`。安装后执行 `/reload-plugins`。
+会话内也可以用 `/plugin marketplace add shiwenbin1617/baton` 和 `/plugin install baton@baton`。安装后执行 `/reload-plugins`。

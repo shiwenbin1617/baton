@@ -1,5 +1,5 @@
 {
-  "name": "baton-local",
+  "name": "baton",
   "owner": { "name": "shiwenbin" },
   "description": "baton 本地插件市场",
   "plugins": [
