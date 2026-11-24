@@ -5,7 +5,9 @@ set -euo pipefail
 workdir="${1:?usage: review.sh <workdir> <task-id> [max-rounds]}"
 task="${2:?usage: review.sh <workdir> <task-id> [max-rounds]}"
 max_rounds="${3:-5}"
-schema="$(cd "$(dirname "$0")" && pwd)/verdict.schema.json"
+here="$(cd "$(dirname "$0")" && pwd)"
+schema="$here/verdict.schema.json"
+standards="$here/../references/engineering.md"
 root="$(git rev-parse --show-toplevel)"
 workdir="$(cd "$workdir" && pwd)"
 cd "$root"
@@ -25,7 +27,7 @@ if [[ -f "$session_file" ]]; then
     "$(cat "$session_file")" "$(cat "$prompt")" </dev/null >/dev/null
 else
   codex exec -s read-only -m "${BATON_REVIEW_MODEL:-gpt-6.2-astra}" -c model_reasoning_effort="${BATON_REVIEW_EFFORT:-high}" \
-    --json --output-schema "$schema" -o "$out" "$(cat "$prompt")" </dev/null \
+    --json --output-schema "$schema" -o "$out" "$(cat "$standards"; printf '\n\n---\n\n'; cat "$prompt")" </dev/null \
     | sed -nE 's/.*"type":"thread.started","thread_id":"([^"]+)".*/\1/p' > "$session_file"
 fi
 

@@ -16,6 +16,21 @@ Claude Code 插件。正常开发需求按 PRD 驱动的串行流程完成：
 
 ## 文件
 
+## 结构
+
+| 路径 | 内容 |
+|---|---|
+| `skills/prd` | 需求调研、PRD 起稿、Codex 交叉验证、用户确认 |
+| `skills/build` | 拆任务、逐条实现与审查、顾问把关、提交与合并请求 |
+| `agents/implementer.md` | Sonnet 实现者，按说明实现单条任务，不碰 git |
+| `agents/advisor.md` | Opus 只读顾问，在四个节点给判断 |
+| `references/engineering.md` | 工程准则：第一性原理、优先成熟方案、不绕路、不做向后兼容、不过度设计、不过度捕获错误 |
+| `references/prd-template.md` | PRD 模板 |
+| `references/briefs.md` | TASKS 格式与各角色的说明模板 |
+| `references/pull-request.md` | CNB / GitHub 合并请求与 CI 跟踪 |
+| `scripts/start.sh` | 从最新基线切分支，建 `.baton/<branch>/` 工作目录 |
+| `scripts/review.sh` | Codex 只读审查，首轮自动附上工程准则，续接同一会话，结构化结论 |
+
 PRD、TASKS、审查记录放在仓库内 `.baton/<branch>/`，由 `.git/info/exclude` 排除，不进 PR。
 
 ## 安装
