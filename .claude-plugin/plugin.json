@@ -1,0 +1,15 @@
+{
+  "name": "baton",
+  "version": "0.1.0",
+  "description": "PRD 定稿后串行开发：Sonnet 实现、Codex 逐条审查、Opus 顾问把关，单 commit 新分支发合并请求",
+  "author": {
+    "name": "shiwenbin"
+  },
+  "keywords": [
+    "workflow",
+    "codex",
+    "prd",
+    "review"
+  ],
+  "license": "MIT"
+}

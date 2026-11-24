@@ -1,0 +1,8 @@
+{
+  "name": "baton-local",
+  "owner": { "name": "shiwenbin" },
+  "description": "baton 本地插件市场",
+  "plugins": [
+    { "name": "baton", "source": "./", "description": "PRD 驱动的串行开发流程" }
+  ]
+}

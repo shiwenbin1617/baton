@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pass", "blocking"],
+  "properties": {
+    "pass": { "type": "boolean" },
+    "blocking": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["location", "problem", "trigger"],
+        "properties": {
+          "location": { "type": "string" },
+          "problem": { "type": "string" },
+          "trigger": { "type": "string" }
+        }
+      }
+    }
+  }
+}
