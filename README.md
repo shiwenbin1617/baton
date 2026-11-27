@@ -11,7 +11,7 @@ Claude Code 插件。正常开发需求按 PRD 驱动的串行流程完成：
 
 ## 依赖
 
-- `codex` CLI（已登录）。Reviewer 默认 `gpt-6.2-astra` / high，可用 `BATON_REVIEW_MODEL`、`BATON_REVIEW_EFFORT` 覆盖。
+- `codex` CLI（已登录）。Reviewer 默认 `gpt-6.2-sol` / high，可用 `BATON_REVIEW_MODEL`、`BATON_REVIEW_EFFORT` 覆盖。
 - CNB 仓库需要 `cnb` CLI（`npm i -g @cnbcool/cnb-cli && cnb login`）；GitHub 仓库需要 `gh`。
 - `jq`。
 

@@ -9,7 +9,7 @@ max_rounds="${3:-5}"
 here="$(cd "$(dirname "$0")" && pwd)"
 schema="$here/verdict.schema.json"
 standards="$here/../references/engineering.md"
-model="${BATON_REVIEW_MODEL:-gpt-6.2-astra}"
+model="${BATON_REVIEW_MODEL:-gpt-6.2-sol}"
 effort="${BATON_REVIEW_EFFORT:-high}"
 
 root="$(git -C "$workdir" rev-parse --show-toplevel)"

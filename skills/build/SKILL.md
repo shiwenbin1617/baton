@@ -32,7 +32,7 @@ allowed-tools: Bash(${CLAUDE_PLUGIN_ROOT}/scripts/start.sh *), Bash(${CLAUDE_PLU
 |---|---|---|
 | 主控 | 当前会话 | 拆任务、写说明、审 diff、跑检查、commit、发 PR。高风险条目亲自实现 |
 | 实现者 | `baton:implementer`（Sonnet） | 按说明实现一条任务，跑检查。不能做任何 git 写操作 |
-| Reviewer | `scripts/review.sh`（Codex，默认 `gpt-6.2-astra`，high，只读沙箱） | 每条审查，续接同一会话，默认最多 5 轮 |
+| Reviewer | `scripts/review.sh`（Codex，默认 `gpt-6.2-sol`，high，只读沙箱） | 每条审查，续接同一会话，默认最多 5 轮 |
 | 顾问 | `baton:advisor`（Opus，只读） | 只在节点 a、b、c、d 给判断 |
 
 高风险条目以 PRD 的“风险”节为准。环境变量 `BATON_REVIEW_MODEL`、`BATON_REVIEW_EFFORT` 可以换 Reviewer 的模型和推理档位。
