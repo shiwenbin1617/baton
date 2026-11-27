@@ -1,6 +1,6 @@
 {
   "name": "baton",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "PRD 定稿后串行开发：Sonnet 实现、Codex 逐条审查、Opus 顾问把关，单 commit 新分支发合并请求",
   "author": {
     "name": "shiwenbin"
